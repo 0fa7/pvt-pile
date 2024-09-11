@@ -5,8 +5,15 @@ project(pvt_pile)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(PVT_PILE_CORE_SOURCE
+    Repl.cpp)
+
+add_library(pvt_pile_core ${PVT_PILE_CORE_SOURCE})
+
 set(PVT_PILE_MAIN_SOURCES
     pvt_pile.cpp)
 
 add_executable(pvt_pile
     ${PVT_PILE_MAIN_SOURCES})
+
+target_link_libraries(pvt_pile pvt_pile_core)
