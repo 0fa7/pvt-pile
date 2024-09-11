@@ -3,10 +3,12 @@
 #include <string>
 #include <vector>
 
+class Token;
+
 class Scanner
 {
 public:
-    static std::vector<std::string> Scan(const std::string& buffer);
+    static std::vector<Token> Scan(const std::string& buffer);
 private:
     Scanner();
     ~Scanner();

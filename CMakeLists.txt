@@ -6,7 +6,9 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set(PVT_PILE_CORE_SOURCE
-    Repl.cpp)
+    Repl.cpp
+    Scanner.cpp
+    Token.cpp)
 
 add_library(pvt_pile_core ${PVT_PILE_CORE_SOURCE})
 
