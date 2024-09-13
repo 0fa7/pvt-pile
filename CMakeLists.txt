@@ -4,13 +4,14 @@ project(pvt_pile)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-set(PVT_PILE_CORE_SOURCE
+set(PVT_PILE_CORE_SOURCES
     Repl.cpp
     Scanner.cpp
     Token.cpp)
 
-add_library(pvt_pile_core ${PVT_PILE_CORE_SOURCE})
+add_library(pvt_pile_core ${PVT_PILE_CORE_SOURCES})
 
 set(PVT_PILE_MAIN_SOURCES
     pvt_pile.cpp)

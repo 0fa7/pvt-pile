@@ -1,10 +1,9 @@
 #include "Token.hpp"
 
-Token::Token(TOKEN_TYPE type) :
-m_type(type)
-{
-}
+IToken::IToken(TOKEN_TYPE type, int line, const std::string& lexeme) :
+m_type(type), m_line(line), m_lexeme(lexeme)
+{}
 
-Token::~Token()
+IToken::~IToken()
 {
 }
