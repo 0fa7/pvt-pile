@@ -7,7 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(PVT_PILE_CORE_SOURCES
-    Repl.cpp
     Scanner.cpp
     Token.cpp)
 
