@@ -33,7 +33,7 @@ public:
     {
         std::stringstream ss;
         ss << m_type << " " << m_lexeme << " " <<
-            std::to_string(m_literal) << " " << m_line;
+            m_literal << " " << m_line;
         return ss.str();
     }
 

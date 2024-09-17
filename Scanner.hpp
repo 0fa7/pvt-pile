@@ -5,7 +5,6 @@
 #include "Token.hpp"
 #include <vector>
 
-
 class Scanner
 {
 public:
@@ -13,17 +12,20 @@ public:
     ~Scanner();
 
     std::vector<std::unique_ptr<IToken>> ScanTokens();
-    std::vector<std::unique_ptr<IToken>> ScanToken();
-    char Peek();
-    char Consume();
+    void ScanToken();
     bool IsAtEnd();
     char Advance();
+    void AddToken(TOKEN_TYPE type);
+    void AddToken(TOKEN_TYPE type, const std::string& value);
+    bool Match(char expected);
+    char Peek();
+    void String();
 
     std::string m_source;
     std::vector<std::unique_ptr<IToken>> m_tokens;
-    size_t m_startPos;
-    size_t m_currentPos;
-    size_t m_line;
+    int m_startPos = 0;
+    int m_currentPos = 0;
+    int m_line = 1;
 
 private:
     Scanner();
