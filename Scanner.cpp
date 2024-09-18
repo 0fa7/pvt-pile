@@ -1,8 +1,6 @@
 #include "Scanner.hpp"
 #include "Error.hpp"
 #include "TokenType.hpp"
-#include <emmintrin.h>
-#include <memory>
 
 Scanner::Scanner()
 {
@@ -102,7 +100,19 @@ void Scanner::ScanToken()
         String();
         break;
     default:
-        Error(m_line, "Unexpected Character.");
+        if(IsDigit(c))
+        {
+            Number();
+        }
+        else if(IsAlpha(c))
+        {
+            Identifier();
+        }
+        else
+        {
+            Error(m_line, "Unexpected Character.");
+        }
+        
         break;
     }
 }
@@ -123,10 +133,11 @@ void Scanner::AddToken(TOKEN_TYPE type)
     m_tokens.push_back(std::make_unique<Token<int>>(type, text, 0, m_line));
 }
 
-void Scanner::AddToken(TOKEN_TYPE type, const std::string& value)
+template<typename T>
+void Scanner::AddToken(TOKEN_TYPE type, const T& value)
 {
     std::string text = m_source.substr(m_startPos, m_currentPos - m_startPos);
-    m_tokens.push_back(std::make_unique<Token<std::string>>(type, text, value, m_line));
+    m_tokens.push_back(std::make_unique<Token<T>>(type, text, value, m_line));
 }
 
 bool Scanner::Match(char expected)
@@ -177,4 +188,70 @@ void Scanner::String()
 
     std::string value = m_source.substr(m_startPos + 1, m_currentPos - 1 - (m_startPos + 1));
     AddToken(TT_STRING, value);
+}
+
+bool Scanner::IsDigit(char c)
+{
+    return c >= '0' && c <= '9';
+}
+
+void Scanner::Number()
+{
+    while(IsDigit(Peek()))
+    {
+        Advance();
+    }
+
+    if(Peek() == '.' && IsDigit(PeekNext()))
+    {
+        Advance();
+
+        while(IsDigit(Peek()))
+        {
+            Advance();
+        }
+    }
+
+    double value = std::stod(m_source.substr(m_startPos, m_currentPos - m_startPos));
+    AddToken(TT_NUMBER, value);
+}
+
+char Scanner::PeekNext()
+{
+    if(m_currentPos + 1 >= m_source.length())
+    {
+        return '\0';
+    }
+
+    return m_source[m_currentPos + 1];
+}
+
+bool Scanner::IsAlpha(char c)
+{
+    return (c >= 'a' && c <= 'z') ||
+        (c >= 'A' && c <= 'Z') ||
+        c == '_';
+}
+
+void Scanner::Identifier()
+{
+    while (IsAlphaNumeric(Peek()))
+    {
+        Advance();
+    }
+
+    std::string text = m_source.substr(m_startPos, m_currentPos - m_startPos);
+    TOKEN_TYPE type = TT_IDENTIFIER;
+    
+    if(m_keywords.find(text) != m_keywords.end())
+    {
+        type = m_keywords[text];
+    }
+    
+    AddToken(type);
+}
+
+bool Scanner::IsAlphaNumeric(char c)
+{
+    return IsAlpha(c) || IsDigit(c);
 }

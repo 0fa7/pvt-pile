@@ -1,8 +1,6 @@
 #pragma once
 
 #include <cstdint>
-#include <iostream>
-#include <string>
 
 enum TOKEN_TYPE : int16_t
 {
