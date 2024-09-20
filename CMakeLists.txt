@@ -8,6 +8,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(PVT_PILE_CORE_SOURCES
     Error.cpp
+    Expr.cpp
+    ExprVisitor.cpp
     Scanner.cpp
     Token.cpp)
 

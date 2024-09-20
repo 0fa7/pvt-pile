@@ -1,9 +1,9 @@
 #include "Error.hpp"
 #include <fstream>
 #include <iostream>
+#include "Expr.hpp"
 #include "Scanner.hpp"
 #include <string>
-#include "TokenType.hpp"
 
 void Run(std::string source)
 {
@@ -54,6 +54,8 @@ void RunPrompt()
 
 int main(int argc, char** argv)
 {
+    Binary b(nullptr, nullptr, nullptr);
+
     if(argc > 2)
     {
         std::cout << "Usage: pvt_pile [script]" << std:: endl;
