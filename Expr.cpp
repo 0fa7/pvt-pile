@@ -36,11 +36,6 @@ Grouping::~Grouping()
 {
 }
 
-/*void Grouping::Accept(ExprVisitor visitor)
-{
-    //visitor.VisitGrouping<int>(*this);
-}*/
-
 Literal::Literal(std::unique_ptr<IToken> literal) :
     IExpr(nullptr, std::move(literal), nullptr)
 {
@@ -50,11 +45,6 @@ Literal::~Literal()
 {
 }
 
-/*void Literal::Accept(ExprVisitor visitor)
-{
-    //visitor.VisitLiteral<int>(*this);
-}*/
-
 Unary::Unary(std::unique_ptr<IToken> op, std::unique_ptr<IExpr> right) :
     IExpr(nullptr, std::move(op), std::move(right))
 {
@@ -63,8 +53,3 @@ Unary::Unary(std::unique_ptr<IToken> op, std::unique_ptr<IExpr> right) :
 Unary::~Unary()
 {
 }
-
-/*void Unary::Accept(ExprVisitor visitor)
-{
-    //visitor.VisitUnary<int>(*this);
-}*/

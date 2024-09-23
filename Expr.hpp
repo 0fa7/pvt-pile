@@ -1,7 +1,7 @@
 #pragma once
 
-#include <memory>
 #include "ExprVisitor.hpp"
+#include <memory>
 
 class IToken;
 
@@ -10,7 +10,12 @@ class IExpr
   public:
     IExpr(std::unique_ptr<IExpr> left, std::unique_ptr<IToken> op, std::unique_ptr<IExpr> right);
     virtual ~IExpr();
-    // virtual void Accept(ExprVisitor visitor) = 0;
+
+    template <typename T, typename R> R Accept(T* visitor)
+    {
+      static_cast<T*>(visitor);
+      return R{};
+    }
 
     std::unique_ptr<IExpr> m_left;
     std::unique_ptr<IToken> m_op;
@@ -25,20 +30,23 @@ class Binary : public IExpr
   public:
     Binary(std::unique_ptr<IExpr> left, std::unique_ptr<IToken> op, std::unique_ptr<IExpr> right);
     virtual ~Binary() override;
-    // virtual void Accept(ExprVisitor visitor) override;
+
     template <typename T, typename R> R Accept(T* visitor)
     {
         return visitor->VisitBinary(*this);
     }
 };
 
-
 class Grouping : public IExpr
 {
   public:
     Grouping(std::unique_ptr<IExpr> expr);
     virtual ~Grouping() override;
-    // virtual void Accept(ExprVisitor visitor) override;
+
+    template <typename T, typename R> R Accept(T* visitor)
+    {
+        return visitor->VisitGrouping(*this);
+    }
 };
 
 class Literal : public IExpr
@@ -46,7 +54,11 @@ class Literal : public IExpr
   public:
     Literal(std::unique_ptr<IToken> literal);
     virtual ~Literal() override;
-    // virtual void Accept(ExprVisitor visitor) override;
+
+    template <typename T, typename R> R Accept(T* visitor)
+    {
+        return visitor->VisitLiteral(*this);
+    }
 };
 
 class Unary : public IExpr
@@ -54,5 +66,9 @@ class Unary : public IExpr
   public:
     Unary(std::unique_ptr<IToken> op, std::unique_ptr<IExpr> right);
     virtual ~Unary() override;
-    // virtual void Accept(ExprVisitor visitor) override;
+
+    template <typename T, typename R> R Accept(T* visitor)
+    {
+        return visitor->VisitUnary(*this);
+    }
 };

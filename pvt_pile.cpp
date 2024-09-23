@@ -1,4 +1,6 @@
+#include "AstPrinter.hpp"
 #include "Error.hpp"
+#include <cstddef>
 #include <fstream>
 #include <iostream>
 #include "Expr.hpp"
@@ -61,13 +63,21 @@ int main(int argc, char** argv)
     Unary u(nullptr, nullptr);
 
     ExprVisitor<int> ex;
+    AstPrinter ap;
 
-    int i = b.Accept<ExprVisitor<int>, int>(&ex);
-    //g.Accept<ExprVisitor<void>>(&ex);
-    //l.Accept<ExprVisitor<void>>(&ex);
-    //u.Accept<ExprVisitor<void>>(&ex);
+    int i = b.Accept<decltype(ex), int>(&ex);
+    g.Accept<decltype(ex), int>(&ex);
+    l.Accept<decltype(ex), int>(&ex);
+    u.Accept<decltype(ex), int>(&ex);
+    IExpr ie(nullptr, nullptr, nullptr);
 
+    std::cout << b.Accept<decltype(ap), std::string>(&ap) << std::endl;
+    std::cout << g.Accept<decltype(ap), std::string>(&ap) << std::endl;
+    std::cout << l.Accept<decltype(ap), std::string>(&ap) << std::endl;
+    std::cout << u.Accept<decltype(ap), std::string>(&ap) << std::endl;
     std::cout << i << std::endl;
+    
+    std::cout << ap.Print(&ie) << std::endl;
 
     if(argc > 2)
     {
