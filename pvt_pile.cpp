@@ -2,6 +2,7 @@
 #include <fstream>
 #include <iostream>
 #include "Expr.hpp"
+#include "ExprVisitor.hpp"
 #include "Scanner.hpp"
 #include <string>
 
@@ -55,6 +56,18 @@ void RunPrompt()
 int main(int argc, char** argv)
 {
     Binary b(nullptr, nullptr, nullptr);
+    Grouping g(nullptr);
+    Literal l(nullptr);
+    Unary u(nullptr, nullptr);
+
+    ExprVisitor<int> ex;
+
+    int i = b.Accept<ExprVisitor<int>, int>(&ex);
+    //g.Accept<ExprVisitor<void>>(&ex);
+    //l.Accept<ExprVisitor<void>>(&ex);
+    //u.Accept<ExprVisitor<void>>(&ex);
+
+    std::cout << i << std::endl;
 
     if(argc > 2)
     {
