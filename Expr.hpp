@@ -1,74 +1,39 @@
 #pragma once
 
-#include "ExprVisitor.hpp"
-#include <memory>
-
 class IToken;
+class IVisitor;
 
 class IExpr
 {
   public:
-    IExpr(std::unique_ptr<IExpr> left, std::unique_ptr<IToken> op, std::unique_ptr<IExpr> right);
-    virtual ~IExpr();
-
-    template <typename T, typename R> R Accept(T* visitor)
-    {
-      static_cast<T*>(visitor);
-      return R{};
-    }
-
-    std::unique_ptr<IExpr> m_left;
-    std::unique_ptr<IToken> m_op;
-    std::unique_ptr<IExpr> m_right;
-
-  private:
     IExpr();
+    ~IExpr();
+
+    virtual void* Accept(IVisitor* visitor);
 };
 
 class Binary : public IExpr
 {
   public:
-    Binary(std::unique_ptr<IExpr> left, std::unique_ptr<IToken> op, std::unique_ptr<IExpr> right);
-    virtual ~Binary() override;
+    Binary();
+    Binary(IExpr* left, IToken* op, IExpr* right);
+    ~Binary();
 
-    template <typename T, typename R> R Accept(T* visitor)
-    {
-        return visitor->VisitBinary(*this);
-    }
+    virtual void* Accept(IVisitor* visitor) override;
+
+    IExpr* m_left = nullptr;
+    IToken* m_operator = nullptr;
+    IExpr* m_right = nullptr;
 };
 
 class Grouping : public IExpr
 {
   public:
-    Grouping(std::unique_ptr<IExpr> expr);
-    virtual ~Grouping() override;
+    Grouping();
+    Grouping(IExpr* expr);
+    ~Grouping();
 
-    template <typename T, typename R> R Accept(T* visitor)
-    {
-        return visitor->VisitGrouping(*this);
-    }
-};
+    virtual void* Accept(IVisitor* visitor) override;
 
-class Literal : public IExpr
-{
-  public:
-    Literal(std::unique_ptr<IToken> literal);
-    virtual ~Literal() override;
-
-    template <typename T, typename R> R Accept(T* visitor)
-    {
-        return visitor->VisitLiteral(*this);
-    }
-};
-
-class Unary : public IExpr
-{
-  public:
-    Unary(std::unique_ptr<IToken> op, std::unique_ptr<IExpr> right);
-    virtual ~Unary() override;
-
-    template <typename T, typename R> R Accept(T* visitor)
-    {
-        return visitor->VisitUnary(*this);
-    }
+    IExpr* m_expr = nullptr;
 };

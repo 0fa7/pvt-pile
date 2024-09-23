@@ -1,75 +1,26 @@
 #pragma once
-#include "Expr.hpp"
-#include <iostream>
 
+class IExpr;
 class Binary;
 class Grouping;
-class Literal;
-class Unary;
 
-template <class T, typename R> class BaseVisitor
+class IVisitor
 {
   public:
-    BaseVisitor()
-    {
-    }
-    ~BaseVisitor()
-    {
-    }
+    IVisitor();
+    ~IVisitor();
 
-    R VisitBinary(Binary& binary)
-    {
-        return static_cast<T*>(this)->VisitBinary(binary);
-    }
-
-    R VisitGrouping(Grouping& grouping)
-    {
-        return static_cast<T*>(this)->VisitGrouping(grouping);
-    }
-
-    R VisitLiteral(Literal& literal)
-    {
-        return static_cast<T*>(this)->VisitLiteral(literal);
-    }
-
-    R VisitUnary(Unary& unary)
-    {
-        return static_cast<T*>(this)->VisitUnary(unary);
-    }
+    virtual void* VisitBinary(Binary* expr) = 0;
+    virtual void* VisitGrouping(Grouping* expr) = 0;
 };
 
-template <typename R> class ExprVisitor : public BaseVisitor<ExprVisitor<R>, R>
+class VisitorEx : public IVisitor
 {
   public:
-    ExprVisitor()
-    {
-    }
+    VisitorEx();
+    ~VisitorEx();
 
-    ~ExprVisitor()
-    {
-    }
-
-    R VisitBinary(Binary& binary)
-    {
-        std::cout << "ExprVisitor::VisitBinary" << std::endl;
-        return R{};
-    }
-
-    R VisitGrouping(Grouping& binary)
-    {
-        std::cout << "ExprVisitor::VisitGrouping" << std::endl;
-        return R{};
-    }
-
-    R VisitLiteral(Literal& binary)
-    {
-        std::cout << "ExprVisitor::VisitLiteral" << std::endl;
-        return R{};
-    }
-
-    R VisitUnary(Unary& binary)
-    {
-        std::cout << "ExprVisitor::VisitUnary" << std::endl;
-        return R{};
-    }
+    void* Call(IExpr* expr);
+    virtual void* VisitBinary(Binary* expr) override;
+    virtual void* VisitGrouping(Grouping* expr) override;
 };
