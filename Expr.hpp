@@ -42,12 +42,12 @@ class Literal : public IExpr
 {
   public:
     Literal();
-    Literal(void* object);
+    Literal(IToken* object);
     ~Literal();
 
     virtual void* Accept(IVisitor* visitor) override;
 
-    void* m_object = nullptr;
+    IToken* m_object = nullptr;
 };
 
 class Unary : public IExpr

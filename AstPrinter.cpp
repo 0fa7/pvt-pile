@@ -1,9 +1,10 @@
 #include "AstPrinter.hpp"
 #include "Expr.hpp"
 #include <memory>
-#include <regex>
 #include <sstream>
+#include <string>
 #include "Token.hpp"
+#include "TokenType.hpp"
 
 AstPrinter::AstPrinter()
 {
@@ -34,10 +35,15 @@ void* AstPrinter::VisitGrouping(Grouping* expr)
 void* AstPrinter::VisitLiteral(Literal* expr)
 {
     std::string* res = new std::string("nil");
+    Token<double>* t = reinterpret_cast<Token<double>*>(expr->m_object);
 
-    if(expr->m_object)
+    if(expr->m_object->m_type == TT_NUMBER)
+    {    
+        *res = std::to_string(t->m_literal);
+    }
+    else if(expr->m_object->m_type == TT_IDENTIFIER || expr->m_object->m_type == TT_STRING)
     {
-        *res = "literal";
+        *res = t->m_literal;
     }
 
     return static_cast<void*>(res);

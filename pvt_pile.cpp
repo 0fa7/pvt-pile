@@ -63,8 +63,8 @@ int main(int argc, char** argv)
     AstPrinter a;
     IExpr* expr = new Binary();
     IExpr* expression = new Binary(
-        new Unary(new Token<int>(TT_MINUS, "-", 0, 1), new Literal(new double(123))),
-        new Token<int>(TT_STAR, "*", 0, 1), new Grouping(new Literal(new double(45.67))));
+        new Unary(new Token<int>(TT_MINUS, "-", 0, 1), new Literal(new Token<double>(TT_NUMBER, "123", 123, 1))),
+        new Token<int>(TT_STAR, "*", 0, 1), new Grouping(new Literal(new Token<double>(TT_NUMBER, "45.67", 45.67, 1))));
 
     std::unique_ptr<std::string> s(static_cast<std::string*>(v.Call(expr)));
     std::unique_ptr<std::string> p = std::move(a.Print(expression));

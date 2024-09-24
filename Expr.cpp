@@ -56,7 +56,7 @@ Literal::Literal()
 {
 }
 
-Literal::Literal(void* object)
+Literal::Literal(IToken* object)
     : m_object(object)
 {
 }
