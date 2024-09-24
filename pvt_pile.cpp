@@ -7,7 +7,6 @@
 #include "TokenType.hpp"
 #include <fstream>
 #include <iostream>
-#include <memory>
 #include <string>
 
 void Run(std::string source)
@@ -61,15 +60,25 @@ int main(int argc, char** argv)
 {
     VisitorEx v;
     //AstPrinter a;
-    IExpr* expr = new Binary();
+    IExpr* be = new Binary();
+    IExpr* ge = new Grouping();
+    IExpr* le = new Literal();
+    IExpr* ue = new Unary();
+
     IExpr* expression = new Binary(
         new Unary(new Token<int>(TT_MINUS, "-", 0, 1), new Literal(new Token<double>(TT_NUMBER, "123", 123, 1))),
         new Token<int>(TT_STAR, "*", 0, 1), new Grouping(new Literal(new Token<double>(TT_NUMBER, "45.67", 45.67, 1))));
 
-    auto s = v.Call2(expression);
+    auto bb = v.VisitBinary(static_cast<Binary*>(be));
+    auto gb = v.VisitGrouping(static_cast<Grouping*>(ge));
+    auto lb = v.VisitLiteral(static_cast<Literal*>(le));
+    auto ub = v.VisitUnary(static_cast<Unary*>(ue));
     //std::unique_ptr<std::string> p = std::move(a.Print(expression));
 
-    std::cout << "void* cast: " << *static_cast<std::string*>(s.get()) << std::endl;
+    std::cout << "void* cast: " << *static_cast<std::string*>(bb.get()) << std::endl;
+    std::cout << "void* cast: " << *static_cast<std::string*>(gb.get()) << std::endl;
+    std::cout << "void* cast: " << *static_cast<std::string*>(lb.get()) << std::endl;
+    std::cout << "void* cast: " << *static_cast<std::string*>(ub.get()) << std::endl;
     //std::cout << "void* cast: " << *p << std::endl;
 
     if (argc > 2)

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ExprVisitor.hpp"
-#include <memory>
+#include "UniqueVoidPtr.hpp"
 #include <string>
 #include <vector>
 
@@ -12,9 +12,9 @@ public:
     ~AstPrinter();
 
     std::unique_ptr<std::string> Print(IExpr* expr);
-    virtual void* VisitBinary(Binary* expr) override;
-    virtual void* VisitGrouping(Grouping* expr) override;
-    virtual void* VisitLiteral(Literal* expr) override;
-    virtual void* VisitUnary(Unary* expr) override;
+    virtual UniqueVoidPtr VisitBinary(Binary* expr) override;
+    virtual UniqueVoidPtr VisitGrouping(Grouping* expr) override;
+    virtual UniqueVoidPtr VisitLiteral(Literal* expr) override;
+    virtual UniqueVoidPtr VisitUnary(Unary* expr) override;
     std::string Parenthesize(const std::string& name, const std::vector<IExpr*> exprs);
 };

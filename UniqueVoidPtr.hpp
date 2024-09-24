@@ -12,5 +12,5 @@ template <typename T> void VoidPtrDeleter(void const* data)
 
 template <typename T> UniqueVoidPtr MakeUniqueVoidPtr(T* ptr)
 {
-    return UniqueVoidPtr(ptr, VoidPtrDeleter);
+    return UniqueVoidPtr(ptr, VoidPtrDeleter<T>);
 }

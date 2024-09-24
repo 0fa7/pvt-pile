@@ -1,5 +1,6 @@
 #include "Expr.hpp"
 #include "ExprVisitor.hpp"
+#include "UniqueVoidPtr.hpp"
 
 IExpr::IExpr()
 {
@@ -9,9 +10,10 @@ IExpr::~IExpr()
 {
 }
 
-void* IExpr::Accept(IVisitor* visitor)
+UniqueVoidPtr IExpr::Accept(IVisitor* visitor)
 {
-    return {};
+
+    return MakeUniqueVoidPtr(new int(0));
 }
 
 Binary::Binary()
@@ -29,7 +31,7 @@ Binary::~Binary()
 {
 }
 
-void* Binary::Accept(IVisitor* visitor)
+UniqueVoidPtr Binary::Accept(IVisitor* visitor)
 {
     return visitor->VisitBinary(this);
 }
@@ -47,7 +49,7 @@ Grouping::~Grouping()
 {
 }
 
-void* Grouping::Accept(IVisitor* visitor)
+UniqueVoidPtr Grouping::Accept(IVisitor* visitor)
 {
     return visitor->VisitGrouping(this);
 }
@@ -65,7 +67,7 @@ Literal::~Literal()
 {
 }
 
-void* Literal::Accept(IVisitor* visitor)
+UniqueVoidPtr Literal::Accept(IVisitor* visitor)
 {
     return visitor->VisitLiteral(this);
 }
@@ -83,7 +85,7 @@ Unary::~Unary()
 {
 }
 
-void* Unary::Accept(IVisitor* visitor)
+UniqueVoidPtr Unary::Accept(IVisitor* visitor)
 {
     return visitor->VisitUnary(this);
 }

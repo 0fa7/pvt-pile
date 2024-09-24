@@ -20,19 +20,19 @@ std::unique_ptr<std::string> AstPrinter::Print(IExpr* expr)
     return res;
 }
 
-void* AstPrinter::VisitBinary(Binary* expr)
+UniqueVoidPtr AstPrinter::VisitBinary(Binary* expr)
 {
     std::string* res = new std::string(Parenthesize(expr->m_operator->m_lexeme, {expr->m_left, expr->m_right}));
     return static_cast<void*>(res);
 }
 
-void* AstPrinter::VisitGrouping(Grouping* expr)
+UniqueVoidPtr AstPrinter::VisitGrouping(Grouping* expr)
 {
     std::string* res = new std::string(Parenthesize("group", {expr->m_expr}));
     return static_cast<void*>(res);
 }
 
-void* AstPrinter::VisitLiteral(Literal* expr)
+UniqueVoidPtr AstPrinter::VisitLiteral(Literal* expr)
 {
     std::string* res = new std::string("nil");
     Token<double>* t = reinterpret_cast<Token<double>*>(expr->m_object);
@@ -49,7 +49,7 @@ void* AstPrinter::VisitLiteral(Literal* expr)
     return static_cast<void*>(res);
 }
 
-void* AstPrinter::VisitUnary(Unary* expr)
+UniqueVoidPtr AstPrinter::VisitUnary(Unary* expr)
 {
     std::string* res = new std::string(Parenthesize(expr->m_operator->m_lexeme, {expr->m_right}));
     return static_cast<void*>(res);

@@ -1,6 +1,7 @@
 #pragma once
 
-#include <memory>
+#include "UniqueVoidPtr.hpp"
+
 class IToken;
 class IVisitor;
 
@@ -10,7 +11,7 @@ class IExpr
     IExpr();
     ~IExpr();
 
-    virtual void* Accept(IVisitor* visitor);
+    virtual UniqueVoidPtr Accept(IVisitor* visitor);
 };
 
 class Binary : public IExpr
@@ -20,7 +21,7 @@ class Binary : public IExpr
     Binary(IExpr* left, IToken* op, IExpr* right);
     ~Binary();
 
-    virtual void* Accept(IVisitor* visitor) override;
+    virtual UniqueVoidPtr Accept(IVisitor* visitor) override;
 
     IExpr* m_left = nullptr;
     IToken* m_operator = nullptr;
@@ -34,7 +35,7 @@ class Grouping : public IExpr
     Grouping(IExpr* expr);
     ~Grouping();
 
-    virtual void* Accept(IVisitor* visitor) override;
+    virtual UniqueVoidPtr Accept(IVisitor* visitor) override;
 
     IExpr* m_expr = nullptr;
 };
@@ -46,7 +47,7 @@ class Literal : public IExpr
     Literal(IToken* object);
     ~Literal();
 
-    virtual void* Accept(IVisitor* visitor) override;
+    virtual UniqueVoidPtr Accept(IVisitor* visitor) override;
 
     IToken* m_object = nullptr;
 };
@@ -58,7 +59,7 @@ class Unary : public IExpr
     Unary(IToken* op, IExpr* right);
     ~Unary();
 
-    virtual void* Accept(IVisitor* visitor) override;
+    virtual UniqueVoidPtr Accept(IVisitor* visitor) override;
 
     IToken* m_operator = nullptr;
     IExpr* m_right = nullptr;
