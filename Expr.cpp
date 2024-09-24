@@ -11,7 +11,7 @@ IExpr::~IExpr()
 
 void* IExpr::Accept(IVisitor* visitor)
 {
-    return nullptr;
+    return {};
 }
 
 Binary::Binary()

@@ -60,17 +60,17 @@ void RunPrompt()
 int main(int argc, char** argv)
 {
     VisitorEx v;
-    AstPrinter a;
+    //AstPrinter a;
     IExpr* expr = new Binary();
     IExpr* expression = new Binary(
         new Unary(new Token<int>(TT_MINUS, "-", 0, 1), new Literal(new Token<double>(TT_NUMBER, "123", 123, 1))),
         new Token<int>(TT_STAR, "*", 0, 1), new Grouping(new Literal(new Token<double>(TT_NUMBER, "45.67", 45.67, 1))));
 
-    std::unique_ptr<std::string> s(static_cast<std::string*>(v.Call(expr)));
-    std::unique_ptr<std::string> p = std::move(a.Print(expression));
+    auto s = v.Call2(expression);
+    //std::unique_ptr<std::string> p = std::move(a.Print(expression));
 
-    std::cout << "void* cast: " << *s << std::endl;
-    std::cout << "void* cast: " << *p << std::endl;
+    std::cout << "void* cast: " << *static_cast<std::string*>(s.get()) << std::endl;
+    //std::cout << "void* cast: " << *p << std::endl;
 
     if (argc > 2)
     {

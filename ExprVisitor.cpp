@@ -1,5 +1,7 @@
 #include "ExprVisitor.hpp"
 #include "Expr.hpp"
+#include "UniqueVoidPtr.hpp"
+#include <memory>
 #include <string>
 
 IVisitor::IVisitor()
@@ -17,31 +19,43 @@ VisitorEx::~VisitorEx()
 {
 }
 
-void* VisitorEx::Call(IExpr* expr)
+UniqueVoidPtr VisitorEx::Call2(IExpr* expr)
 {
-    return expr->Accept(this);
+    UniqueVoidPtr str(new std::string("World"), VoidPtrDeleter<std::string>);   
+    return str;
+}
+
+std::shared_ptr<void> VisitorEx::Call(IExpr* expr)
+{
+    auto res = std::shared_ptr<std::string>(new std::string("VisitorEx::Call"));
+    
+    return res;
 }
 
 void* VisitorEx::VisitBinary(Binary* expr)
 {
-    std::string* res = new std::string("VisitBinary");
-    return static_cast<void*>(res);
+    //std::unique_ptr<void> res(new std::string("VisitBinary"));
+    //return res;
+    return {};
 }
 
 void* VisitorEx::VisitGrouping(Grouping* expr)
 {
-    std::string* res = new std::string("VisitGrouping");
-    return static_cast<void*>(res);
+    //std::unique_ptr<void> res(new std::string("VisitGrouping"));
+    //return res;
+    return {};
 }
 
 void* VisitorEx::VisitLiteral(Literal* expr)
 {
-    std::string* res = new std::string("VisitLiteral");
-    return static_cast<void*>(res);
+    //std::unique_ptr<void> res(new std::string("VisitLiteral"));
+    //return res;
+    return {};
 }
 
 void* VisitorEx::VisitUnary(Unary* expr)
 {
-    std::string* res = new std::string("VisitUnary");
-    return static_cast<void*>(res);
+    //std::unique_ptr<void> res(new std::string("VisitUnary"));
+    //return res;
+    return {};
 }

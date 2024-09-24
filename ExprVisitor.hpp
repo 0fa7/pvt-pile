@@ -1,5 +1,8 @@
 #pragma once
 
+#include "UniqueVoidPtr.hpp"
+#include <string>
+
 class IExpr;
 class Binary;
 class Grouping;
@@ -24,7 +27,8 @@ class VisitorEx : public IVisitor
     VisitorEx();
     ~VisitorEx();
 
-    void* Call(IExpr* expr);
+    UniqueVoidPtr Call2(IExpr* expr);
+    std::shared_ptr<void> Call(IExpr* expr);
     virtual void* VisitBinary(Binary* expr) override;
     virtual void* VisitGrouping(Grouping* expr) override;
     virtual void* VisitLiteral(Literal* expr) override;
