@@ -4,6 +4,7 @@
 IExpr::IExpr()
 {
 }
+
 IExpr::~IExpr()
 {
 }
@@ -37,10 +38,9 @@ Grouping::Grouping()
 {
 }
 
-Grouping::Grouping(IExpr* expr) :
-    m_expr(expr)
+Grouping::Grouping(IExpr* expr)
+    : m_expr(expr)
 {
-
 }
 
 Grouping::~Grouping()
@@ -50,4 +50,40 @@ Grouping::~Grouping()
 void* Grouping::Accept(IVisitor* visitor)
 {
     return visitor->VisitGrouping(this);
+}
+
+Literal::Literal()
+{
+}
+
+Literal::Literal(void* object)
+    : m_object(object)
+{
+}
+
+Literal::~Literal()
+{
+}
+
+void* Literal::Accept(IVisitor* visitor)
+{
+    return visitor->VisitLiteral(this);
+}
+
+Unary::Unary()
+{
+}
+
+Unary::Unary(IToken* op, IExpr* right) :
+    m_operator(op), m_right(right)
+{
+}
+
+Unary::~Unary()
+{
+}
+
+void* Unary::Accept(IVisitor* visitor)
+{
+    return visitor->VisitUnary(this);
 }

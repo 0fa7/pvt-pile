@@ -1,5 +1,5 @@
+#include "AstPrinter.hpp"
 #include "Error.hpp"
-#include <cstddef>
 #include <fstream>
 #include <iostream>
 #include "Expr.hpp"
@@ -58,6 +58,7 @@ void RunPrompt()
 int main(int argc, char** argv)
 {
     VisitorEx v;
+    AstPrinter a;
     IExpr* expr = new Binary();
 
     std::unique_ptr<std::string> s(static_cast<std::string*>(v.Call(expr)));
