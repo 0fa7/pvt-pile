@@ -2,6 +2,7 @@
 
 #include "ExprVisitor.hpp"
 #include "UniqueVoidPtr.hpp"
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -16,5 +17,7 @@ public:
     virtual UniqueVoidPtr VisitGrouping(Grouping* expr) override;
     virtual UniqueVoidPtr VisitLiteral(Literal* expr) override;
     virtual UniqueVoidPtr VisitUnary(Unary* expr) override;
-    std::string Parenthesize(const std::string& name, const std::vector<IExpr*> exprs);
+    UniqueVoidPtr Parenthesize(const std::string& name, const std::vector<IExpr*> exprs);
+
+    std::stringstream m_ss;
 };

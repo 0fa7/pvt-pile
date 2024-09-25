@@ -1,10 +1,13 @@
 #include "AstPrinter.hpp"
 #include "Expr.hpp"
+#include <iostream>
 #include <memory>
+#include <ostream>
 #include <sstream>
 #include <string>
 #include "Token.hpp"
 #include "TokenType.hpp"
+#include "UniqueVoidPtr.hpp"
 
 AstPrinter::AstPrinter()
 {
@@ -16,58 +19,64 @@ AstPrinter::~AstPrinter()
 
 std::unique_ptr<std::string> AstPrinter::Print(IExpr* expr)
 {
-    std::unique_ptr<std::string> res(static_cast<std::string*>(expr->Accept(this)));
-    return res;
+    auto res = *static_cast<std::string*>(expr->Accept(this).get());
+    return std::unique_ptr<std::string>(new std::string (res));
 }
 
 UniqueVoidPtr AstPrinter::VisitBinary(Binary* expr)
 {
-    std::string* res = new std::string(Parenthesize(expr->m_operator->m_lexeme, {expr->m_left, expr->m_right}));
-    return static_cast<void*>(res);
+    auto res = Parenthesize(expr->m_operator->m_lexeme, {expr->m_left, expr->m_right});
+    return res;
 }
 
 UniqueVoidPtr AstPrinter::VisitGrouping(Grouping* expr)
 {
-    std::string* res = new std::string(Parenthesize("group", {expr->m_expr}));
-    return static_cast<void*>(res);
+    auto res = Parenthesize("group", {expr->m_expr});
+    return res;
 }
 
 UniqueVoidPtr AstPrinter::VisitLiteral(Literal* expr)
 {
-    std::string* res = new std::string("nil");
-    Token<double>* t = reinterpret_cast<Token<double>*>(expr->m_object);
+    std::stringstream ss;
 
     if(expr->m_object->m_type == TT_NUMBER)
-    {    
-        *res = std::to_string(t->m_literal);
+    {   
+        Token<double>* t = reinterpret_cast<Token<double>*>(expr->m_object);
+        ss << t->m_literal;
     }
     else if(expr->m_object->m_type == TT_IDENTIFIER || expr->m_object->m_type == TT_STRING)
+    {        
+        Token<std::string>* t = reinterpret_cast<Token<std::string>*>(expr->m_object);
+        ss << t->m_literal;
+    }
+    else
     {
-        *res = t->m_literal;
+        ss << "nil";
     }
 
-    return static_cast<void*>(res);
+    return MakeUniqueVoidPtr(new std::string(ss.str()));
 }
 
 UniqueVoidPtr AstPrinter::VisitUnary(Unary* expr)
 {
-    std::string* res = new std::string(Parenthesize(expr->m_operator->m_lexeme, {expr->m_right}));
-    return static_cast<void*>(res);
+    auto res = Parenthesize(expr->m_operator->m_lexeme, {expr->m_right});
+    return res;
 }
 
-std::string AstPrinter::Parenthesize(const std::string& name, const std::vector<IExpr*> exprs)
+UniqueVoidPtr AstPrinter::Parenthesize(const std::string& name, const std::vector<IExpr*> exprs)
 {
     std::stringstream ss;
+
     ss << "(" << name;
 
     for(auto* expr : exprs)
     {
         ss << " ";
-        auto res = expr->Accept(this);
-        ss << *static_cast<std::string*>(res);
+        auto sub = expr->Accept(this);
+        ss << *static_cast<std::string*>(sub.get());
     }
 
     ss << ")";
 
-    return ss.str();
+    return MakeUniqueVoidPtr(new std::string(ss.str()));
 }

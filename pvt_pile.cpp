@@ -13,11 +13,6 @@ void Run(std::string source)
 {
     Scanner s(source);
     auto tokens = s.ScanTokens();
-
-    for (auto& token : tokens)
-    {
-        // token->Print();
-    }
 }
 
 void RunFile(char* fileName)
@@ -59,7 +54,7 @@ void RunPrompt()
 int main(int argc, char** argv)
 {
     VisitorEx v;
-    //AstPrinter a;
+    AstPrinter a;
     IExpr* be = new Binary();
     IExpr* ge = new Grouping();
     IExpr* le = new Literal();
@@ -73,13 +68,13 @@ int main(int argc, char** argv)
     auto gb = v.VisitGrouping(static_cast<Grouping*>(ge));
     auto lb = v.VisitLiteral(static_cast<Literal*>(le));
     auto ub = v.VisitUnary(static_cast<Unary*>(ue));
-    //std::unique_ptr<std::string> p = std::move(a.Print(expression));
+    auto p = a.Print(expression);
 
     std::cout << "void* cast: " << *static_cast<std::string*>(bb.get()) << std::endl;
     std::cout << "void* cast: " << *static_cast<std::string*>(gb.get()) << std::endl;
     std::cout << "void* cast: " << *static_cast<std::string*>(lb.get()) << std::endl;
     std::cout << "void* cast: " << *static_cast<std::string*>(ub.get()) << std::endl;
-    //std::cout << "void* cast: " << *p << std::endl;
+    std::cout << "void* cast: " << *static_cast<std::string*>(p.get()) << std::endl;
 
     if (argc > 2)
     {
