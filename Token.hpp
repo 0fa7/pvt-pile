@@ -19,7 +19,7 @@ private:
     IToken();
 };
 
-template<typename T>
+template<typename T = int>
 class Token : public IToken
 {
 public:

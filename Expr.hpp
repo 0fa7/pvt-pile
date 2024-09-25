@@ -45,6 +45,7 @@ class Literal : public IExpr
   public:
     Literal();
     Literal(IToken* object);
+    Literal(bool flag);
     ~Literal();
 
     virtual UniqueVoidPtr Accept(IVisitor* visitor) override;
